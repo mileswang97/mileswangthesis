@@ -1,3 +1,5 @@
+# visualize the numpy datasets into sliding pyplot interactives
+
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -7,7 +9,7 @@ from ipywidgets import interact, Dropdown, IntSlider
 #%matplotlib notebook
 plt.style.use('grayscale')
 
-data_path = 'D:/Downloads/MRNet-v1.0/'
+data_path = 'D:/github/mileswangthesis/'
 train_path = str(data_path) + 'train/'
 
 test = np.load(train_path + 'axial/0000.npy')
@@ -40,7 +42,7 @@ class KneePlot():
     def _plot_slices(self, plane, im_slice): 
         fig, ax = plt.subplots(1, 1, figsize=self.figsize)
         ax.imshow(self.x[plane][im_slice, :, :])
-        plt.show()
+        #plt.show()
     
     def draw(self):
         planes_widget = Dropdown(options=self.planes)
@@ -52,13 +54,19 @@ class KneePlot():
             slices_widget.value = slices_widget.max // 2
         planes_widget.observe(update_slices_widget, 'value')
         for plane in self.planes:
-            for im_slice in self.slice_nums:
-                interact(self._plot_slices(plane=planes_widget, im_slice=slices_widget))
+            for im_slice in range(self.slice_nums[plane]):
+                #interact(self._plot_slices(plane=planes_widget, im_slice=slices_widget))
+                interact(self._plot_slices(plane=plane, im_slice=im_slice), plane=planes_widget, im_slice=slices_widget)
 
     def resize(self, figsize): self.figsize = figsize
+
+#https://stackoverflow.com/questions/6697259/interactive-matplotlib-plot-with-two-sliders
+# take a look at this link later
+
 
 # example usage
 case = train_abnl.Case[1]
 x = load_stacks(case)
 plot = KneePlot(x, figsize=(8, 8))
 plot.draw()
+#plt.show()
