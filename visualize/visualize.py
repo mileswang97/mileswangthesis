@@ -1,11 +1,14 @@
 # visualize the numpy datasets into sliding pyplot interactives
+# source: https://towardsdatascience.com/a-radiologists-exploration-of-the-stanford-ml-group-s-mrnet-data-8e2374e11bfb
+
 
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 import matplotlib.pyplot as plt
 import ipywidgets 
-from ipywidgets import interact, Dropdown, IntSlider
+from ipywidgets import interact, Dropdown, IntSlider, interactive
+from IPython.display import display
 #%matplotlib notebook
 plt.style.use('grayscale')
 
@@ -41,8 +44,10 @@ class KneePlot():
     
     def _plot_slices(self, plane, im_slice): 
         fig, ax = plt.subplots(1, 1, figsize=self.figsize)
-        ax.imshow(self.x[plane][im_slice, :, :])
+        slice_img = ax.imshow(self.x[plane][im_slice, :, :])
         #plt.show()
+        plt.close(fig='all')
+        #return slice_img
     
     def draw(self):
         planes_widget = Dropdown(options=self.planes)
@@ -53,11 +58,13 @@ class KneePlot():
             slices_widget.max = self.slice_nums[planes_widget.value] - 1
             slices_widget.value = slices_widget.max // 2
         planes_widget.observe(update_slices_widget, 'value')
-        for plane in self.planes:
-            for im_slice in range(self.slice_nums[plane]):
+        info = []
+        #for plane in self.planes:
+        #    for im_slice in range(self.slice_nums[plane]):
                 #interact(self._plot_slices(plane=planes_widget, im_slice=slices_widget))
-                interact(self._plot_slices(plane=plane, im_slice=im_slice), plane=planes_widget, im_slice=slices_widget)
-
+        #        info.append(self._plot_slices(plane=plane, im_slice=im_slice))
+        temp = interactive(self.x, plane=planes_widget, im_slice=slices_widget)
+        display(temp)
     def resize(self, figsize): self.figsize = figsize
 
 #https://stackoverflow.com/questions/6697259/interactive-matplotlib-plot-with-two-sliders
@@ -65,7 +72,7 @@ class KneePlot():
 
 
 # example usage
-case = train_abnl.Case[1]
+case = train_abnl.Case[20]
 x = load_stacks(case)
 plot = KneePlot(x, figsize=(8, 8))
 plot.draw()
