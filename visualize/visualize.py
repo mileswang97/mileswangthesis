@@ -45,7 +45,7 @@ class KneePlot():
     def _plot_slices(self, plane, im_slice): 
         fig, ax = plt.subplots(1, 1, figsize=self.figsize)
         slice_img = ax.imshow(self.x[plane][im_slice, :, :])
-        #plt.show()
+        plt.show()
         plt.close(fig='all')
         #return slice_img
     
@@ -59,6 +59,7 @@ class KneePlot():
             slices_widget.value = slices_widget.max // 2
         planes_widget.observe(update_slices_widget, 'value')
         info = []
+        # this part of the code creates images of all the knees but does not display in slider format
         #for plane in self.planes:
         #    for im_slice in range(self.slice_nums[plane]):
                 #interact(self._plot_slices(plane=planes_widget, im_slice=slices_widget))
