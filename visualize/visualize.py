@@ -60,10 +60,10 @@ class KneePlot():
         planes_widget.observe(update_slices_widget, 'value')
         info = []
         # this part of the code creates images of all the knees but does not display in slider format
-        #for plane in self.planes:
-        #    for im_slice in range(self.slice_nums[plane]):
+        for plane in self.planes:
+            for im_slice in range(self.slice_nums[plane]):
                 #interact(self._plot_slices(plane=planes_widget, im_slice=slices_widget))
-        #        info.append(self._plot_slices(plane=plane, im_slice=im_slice))
+                info.append(self._plot_slices(plane=plane, im_slice=im_slice))
         temp = interactive(self.x, plane=planes_widget, im_slice=slices_widget)
         display(temp)
     def resize(self, figsize): self.figsize = figsize
